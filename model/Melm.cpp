@@ -40,11 +40,8 @@ arma::mat Melm::calculateELMTraining(const std::vector<Dataset> *data)
     arma::mat X = this->generateDataMatrix(data);
     arma::mat y = this->generateActualClass(data);
     arma::mat H = this->calculateH(&X);
-    arma::mat _H1 = (inv(H.t() * H) * H.t());
-    arma::mat _H2 = arma::pinv(H);
-    std::cout << "Original" << '\n' << _H1 << std::endl;
-    std::cout << "Pinv" << '\n' << _H2 << std::endl;
-    this->betaTopi = (inv(H.t() * H) * H.t()) * y;
+    //this->betaTopi = (inv(H.t() * H) * H.t()) * y;
+    this->betaTopi = arma::pinv(H) * y;
     return H;
 }
 
