@@ -936,19 +936,20 @@ int main()
         vector<Dataset> formattedTraining = Setting::formatValue(valTraining, setting.getParameterCount());
         vector<Dataset> formattedTesting = Setting::formatValue(valTesting, setting.getParameterCount());
 
-        const arma::mat weight = Setting::generateWeight(arma::mat((const arma::uword) setting.getHiddenLayerCount(),
-                                                                   (const arma::uword) setting.getInputLayerCount(),
+        const arma::mat weight = Setting::generateMatrix(arma::mat((const arma::uword) setting.getInputLayerCount(),
+                                                                   (const arma::uword) setting.getHiddenLayerCount(),
                                                                    arma::fill::zeros),
                                                          setting.getInputLayerCount(),
                                                          setting.getHiddenLayerCount(),
                                                          setting.getWeightMin(),
                                                          setting.getWeightMax());
-        const arma::mat bias = Setting::generateBias(arma::mat((const arma::uword) setting.getHiddenLayerCount(),
-                                                               (const arma::uword)1,
-                                                               arma::fill::zeros),
-                                                     setting.getHiddenLayerCount(),
-                                                     setting.getBiasMin(),
-                                                     setting.getBiasMax());
+        const arma::mat bias = Setting::generateMatrix(arma::mat((const arma::uword) 1,
+                                                                 (const arma::uword) setting.getHiddenLayerCount(),
+                                                                 arma::fill::zeros),
+                                                       1,
+                                                       setting.getHiddenLayerCount(),
+                                                       setting.getBiasMin(),
+                                                       setting.getBiasMax());
 
         const CurrencyBound bound = Setting::generateNormalizationBound(CurrencyBound(), valTraining,  5000);
 
