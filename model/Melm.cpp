@@ -100,29 +100,20 @@ arma::mat Melm::generateActualClass(const std::vector<Dataset> *data)
 
 arma::mat Melm::calculateH(const arma::Mat<double> *dataset)
 {
-    arma::mat hInit = (*dataset) * this->w.t();
+    arma::mat hInit = (*dataset) * this->w;
     if(this->biasEnable)
     {
-        hInit.each_row( [this](arma::rowvec& a){
-            assert (a.size() == b.size());
-            int _c = -1;
-            for(arma::rowvec::col_iterator i = a.begin(), is = a.end(); i!=is; ++i)
-            {
-                (*i) = (1.0 / (1.0 + exp(-((*i) + b(++_c, 0)))));
-            }
-        } );
+        hInit += (arma::ones(dataset->n_rows, 1) * this->b);
     }
-    else
-    {
-        hInit.each_row( [this](arma::rowvec& a){
-            assert (a.size() == b.size());
-            int _c = -1;
-            for(arma::rowvec::col_iterator i = a.begin(), is = a.end(); i!=is; ++i)
-            {
-                (*i) = (1.0 / (1.0 + exp(-(*i))));
-            }
-        } );
-    }
+    hInit.each_row([this](arma::rowvec &a)
+                   {
+                       assert (a.size() == b.size());
+                       int _c = -1;
+                       for (arma::rowvec::col_iterator i = a.begin(), is = a.end(); i != is; ++i)
+                       {
+                           (*i) = (1.0 / (1.0 + exp(-(*i))));
+                       }
+                   });
     return hInit;
 }
 
