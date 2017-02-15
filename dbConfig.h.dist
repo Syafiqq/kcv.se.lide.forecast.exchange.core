@@ -1,0 +1,17 @@
+/*
+ * This <core_kcv_se_lide_forcast_currency> project created by :
+ * Name         : syafiq
+ * Date / Time  : 15 February 2017, 8:29 AM.
+ * Email        : syafiq.rezpector@gmail.com
+ * Github       : syafiqq
+ */
+
+#ifndef CORE_KCV_SE_LIDE_FORCAST_CURRENCY_DBCONFIG_H
+#define CORE_KCV_SE_LIDE_FORCAST_CURRENCY_DBCONFIG_H
+
+#define DB_CONFIG_HOST "host_address"
+#define DB_CONFIG_USERNAME "john"
+#define DB_CONFIG_PASSWORD "doe"
+#define DB_CONFIG_SCHEMA "schema"
+
+#endif //CORE_KCV_SE_LIDE_FORCAST_CURRENCY_DBCONFIG_H
