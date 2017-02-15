@@ -60,25 +60,21 @@ int main()
                                                  setting.getBiasMin(),
                                                  setting.getBiasMax());*/
     const double _weight[setting.getHiddenLayerCount()][setting.getInputLayerCount()] = {
-            {0.221,  0.416,  0.229,  0.086},
-            {0.499,  0.037,  -0.302, -0.154},
-            {-0.435, -0.291, -0.436, 0.232},
-            {0.430,  -0.389, 0.344,  -0.496},
-            {0.398,  0.274,  -0.489, -0.446},
-            {-0.301, -0.393, -0.419, 0.173},
-            {0.308,  -0.286, 0.230,  0.237},
-            {-0.024, -0.077, 0.147,  -0.316}
+            {-0.036, -0.437, -0.396, 0.341},
+            {0.256,  0.292,  -0.083, -0.117},
+            {0.225,  -0.260, -0.461, -0.396},
+            {-0.447, -0.414, -0.170, -0.117},
+            {-0.199, 0.467,  0.208,  -0.429},
+            {-0.010, -0.214, -0.468, 0.023},
     };
 
     const double _bias[setting.getHiddenLayerCount()][1] = {
-            {0.930},
-            {0.997},
-            {0.064},
-            {0.039},
-            {0.012},
-            {0.582},
+            {0.626},
             {0.993},
-            {0.087}
+            {0.133},
+            {0.180},
+            {0.890},
+            {0.267}
     };
 
     arma::mat weight = arma::mat((const arma::uword) setting.getHiddenLayerCount(),
@@ -200,6 +196,6 @@ void _setELMParam()
     assert(setting.getWeightMin() != setting.getWeightMax());
     assert(setting.getWeightMin() < setting.getWeightMax());
 
-    setting.setHiddenLayerCount(8);
+    setting.setHiddenLayerCount(6);
     assert(setting.getHiddenLayerCount() > 0);
 }
