@@ -86,6 +86,8 @@ int main()
             weight(i, j) = _weight[i][j];
         }
     }
+    weight = weight.t();
+
     arma::mat bias = arma::mat((const arma::uword) setting.getHiddenLayerCount(), (const arma::uword) 1,
                                arma::fill::zeros);
     for (int i = -1, is = setting.getHiddenLayerCount(), js = 1; ++i < is;)
@@ -95,6 +97,7 @@ int main()
             bias(i, j) = _bias[i][j];
         }
     }
+    bias = bias.t();
 
     const CurrencyBound bound = Setting::generateNormalizationBound(CurrencyBound(), valTraining,  5000);
 
