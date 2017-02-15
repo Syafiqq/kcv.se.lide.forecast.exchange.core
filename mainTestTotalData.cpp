@@ -14,6 +14,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
 #include "model/Melm.h"
+#include "dbConfig.h"
 
 void _setELMParam();
 void _setDBParam();
@@ -84,10 +85,10 @@ int main()
 
 void _setDBParam()
 {
-    setting.setDBHost("tcp://127.0.0.1:3306");
-    setting.setDBUsername("root");
-    setting.setDBPassword("Muhammad_Syafiq");
-    setting.setDBSchema("core.kcv.se.lide.forcast.currency");
+    setting.setDBHost(DB_CONFIG_HOST);
+    setting.setDBUsername(DB_CONFIG_USERNAME);
+    setting.setDBPassword(DB_CONFIG_PASSWORD);
+    setting.setDBSchema(DB_CONFIG_SCHEMA);
     assert(AbstractDB::getInstance().isValid());
 }
 

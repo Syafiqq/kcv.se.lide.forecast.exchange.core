@@ -16,7 +16,7 @@ if (Armadillo_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
 
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -larmadillo -lboost_thread -lboost_system -lboost_timer -lboost_chrono -lmysqlcppconn -lrt")
-        set(CORE_DEPENDENCY database/AbstractDB.cpp database/AbstractDB.h model/core/AbstractModel.cpp model/core/AbstractModel.h model/Exchange.cpp model/Exchange.h entity/EExchange.cpp entity/EExchange.h util/Setting.cpp util/Setting.h model/util/CurrencyBound.cpp model/util/CurrencyBound.h model/Melm.cpp model/Melm.h model/Dataset.cpp model/Dataset.h)
+        set(CORE_DEPENDENCY database/AbstractDB.cpp database/AbstractDB.h model/core/AbstractModel.cpp model/core/AbstractModel.h model/Exchange.cpp model/Exchange.h entity/EExchange.cpp entity/EExchange.h util/Setting.cpp util/Setting.h model/util/CurrencyBound.cpp model/util/CurrencyBound.h model/Melm.cpp model/Melm.h model/Dataset.cpp model/Dataset.h dbConfig.h)
 
         add_executable(core_kcv_se_lide_forcast_currency main.cpp ${CORE_DEPENDENCY})
         target_link_libraries(core_kcv_se_lide_forcast_currency ${ARMADILLO_LIBRARIES} ${Boost_LIBRARIES} mysqlcppconn) # <<<
