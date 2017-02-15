@@ -189,16 +189,17 @@ void Setting::setBiasEnable(bool biasEnable)
 
 const arma::mat Setting::generateBias(arma::Mat<double> matrix, int hiddenSize, double lowerBound, double upperBound)
 {
+    int inputSize = 1;
     base_generator_type generator((const uint32_t &) (std::chrono::system_clock::now()).time_since_epoch().count());
     boost::uniform_real<> uni_dist(lowerBound, upperBound);
     boost::variate_generator<base_generator_type&, boost::uniform_real<> > uni(generator, uni_dist);
 
-    if((matrix.n_rows !=  hiddenSize))
+    if ((matrix.n_rows != inputSize) || (matrix.n_cols != hiddenSize))
     {
-        matrix = arma::mat((const arma::uword) hiddenSize, (const arma::uword) 1, arma::fill::zeros);
+        matrix = arma::mat((const arma::uword) inputSize, (const arma::uword) hiddenSize, arma::fill::zeros);
     }
 
-    for(int i = -1, is = hiddenSize, js = 1; ++i < is;)
+    for (int i = -1, is = inputSize, js = hiddenSize; ++i < is;)
     {
         for (int j = -1; ++j < js;)
         {
@@ -209,19 +210,19 @@ const arma::mat Setting::generateBias(arma::Mat<double> matrix, int hiddenSize, 
     return matrix;
 }
 
-const arma::mat Setting::generateWeight(arma::Mat<double> matrix, int inputSize, int hiddenSize, double lowerBound,
+const arma::mat Setting::generateMatrix(arma::Mat<double> matrix, int inputSize, int hiddenSize, double lowerBound,
                                         double upperBound)
 {
     base_generator_type generator((const uint32_t &) (std::chrono::system_clock::now()).time_since_epoch().count());
     boost::uniform_real<> uni_dist(lowerBound, upperBound);
     boost::variate_generator<base_generator_type&, boost::uniform_real<> > uni(generator, uni_dist);
 
-    if((matrix.n_rows !=  hiddenSize) || (matrix.n_cols != inputSize))
+    if ((matrix.n_rows != inputSize) || (matrix.n_cols != hiddenSize))
     {
-        matrix = arma::mat((const arma::uword) hiddenSize, (const arma::uword) inputSize, arma::fill::zeros);
+        matrix = arma::mat((const arma::uword) inputSize, (const arma::uword) hiddenSize, arma::fill::zeros);
     }
 
-    for(int i = -1, is = hiddenSize, js = inputSize; ++i < is;)
+    for (int i = -1, is = inputSize, js = hiddenSize; ++i < is;)
     {
         for (int j = -1; ++j < js;)
         {

@@ -24,7 +24,7 @@ class Setting
     public:
     static std::vector<Dataset> formatValue(const std::vector<double> value, int count);
     static void printFormatted(const std::vector<Dataset> vector, int count);
-    static const arma::mat generateWeight(arma::Mat<double> matrix, int inputSize, int hiddenSize, double lowerBound,
+    static const arma::mat generateMatrix(arma::Mat<double> matrix, int inputSize, int hiddenSize, double lowerBound,
                                           double upperBound);
     static const arma::mat generateBias(arma::Mat<double> matrix, int hiddenSize, double lowerBound, double upperBound);
     static const CurrencyBound generateNormalizationBound(CurrencyBound bound, const std::vector<double> &list,
