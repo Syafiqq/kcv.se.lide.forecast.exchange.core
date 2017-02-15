@@ -36,6 +36,7 @@ class Melm
     arma::mat calculateELMTesting(const std::vector<Dataset> *data);
     void assignPrediction(std::vector<Dataset> *dataset, arma::mat *_y);
     double calculateAccuracy(const std::vector<Dataset> *normDataset, arma::mat *_y);
+    void __printVector3(const std::vector<Dataset> vector);
 };
 
 

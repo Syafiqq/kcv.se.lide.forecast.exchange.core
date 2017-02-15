@@ -7,7 +7,6 @@
  */
 
 #include "Melm.h"
-#include <cmath>
 #include <cassert>
 
 void Melm::registerMetadata(int feature, const arma::Mat<double> &weight, const arma::Mat<double> &bias,
@@ -23,6 +22,8 @@ void Melm::registerMetadata(int feature, const arma::Mat<double> &weight, const 
 void Melm::learn(const std::vector<Dataset> *data)
 {
     const std::vector<Dataset> norm = this->generateNormalization(data);
+    std::cout << '\n' << "Normalize Training" << std::endl;
+    this->__printVector3(norm);
     this->calculateELMTraining(&norm);
 }
 
@@ -39,6 +40,10 @@ arma::mat Melm::calculateELMTraining(const std::vector<Dataset> *data)
     arma::mat X = this->generateDataMatrix(data);
     arma::mat y = this->generateActualClass(data);
     arma::mat H = this->calculateH(&X);
+    arma::mat _H1 = (inv(H.t() * H) * H.t());
+    arma::mat _H2 = arma::pinv(H);
+    std::cout << "Original" << '\n' << _H1 << std::endl;
+    std::cout << "Pinv" << '\n' << _H2 << std::endl;
     this->betaTopi = (inv(H.t() * H) * H.t()) * y;
     return H;
 }
@@ -150,4 +155,25 @@ double Melm::calculateAccuracy(const std::vector<Dataset> *normDataset, arma::ma
     }
     accuracy /= ++_c;
     return accuracy;
+}
+
+void Melm::__printVector3(const std::vector<Dataset> data)
+{
+    int no = 0;
+    for (std::vector<Dataset>::const_iterator i = data.begin(); i != data.end(); i++)
+    {
+
+        std::cout << ++no
+                  << '\t';
+        for (int j = -1, js = this->feature; ++j < js;)
+        {
+            std::cout << i->getParameter()[j]
+                      << '\t';
+        }
+        std::cout << '\t'
+                  << i->getActual()
+                  << '\t'
+                  << i->getPredicted()
+                  << std::endl;
+    }
 }
