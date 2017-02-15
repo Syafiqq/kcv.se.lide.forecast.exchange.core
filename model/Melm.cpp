@@ -21,15 +21,19 @@ void Melm::registerMetadata(int feature, const arma::Mat<double> &weight, const 
 
 void Melm::learn(const std::vector<Dataset> *data)
 {
+    std::cout << '\n' << "===BEGIN TRAINING===" << std::endl;
     const std::vector<Dataset> norm = this->generateNormalization(data);
-    std::cout << '\n' << "Normalize Training" << std::endl;
+    std::cout << "Normalize Training" << std::endl;
     this->__printVector3(norm);
     this->calculateELMTraining(&norm);
 }
 
 double Melm::testAccuracy(std::vector<Dataset> *data)
 {
+    std::cout << '\n' << "===BEGIN TESTING===" << std::endl;
     const std::vector<Dataset> norm = this->generateNormalization(data);
+    std::cout << "Normalize Testing" << std::endl;
+    this->__printVector3(norm);
     arma::mat _y = this->calculateELMTesting(&norm);
     //this->assignPrediction(data, &_y);
     return this->calculateAccuracy(&norm, &_y);
@@ -40,8 +44,12 @@ arma::mat Melm::calculateELMTraining(const std::vector<Dataset> *data)
     arma::mat X = this->generateDataMatrix(data);
     arma::mat y = this->generateActualClass(data);
     arma::mat H = this->calculateH(&X);
+    arma::mat MPPI = arma::pinv(H);
+    std::cout << "M-P PI" << '\n' << MPPI << std::endl;
+    std::cout << "y" << '\n' << y << std::endl;
     //this->betaTopi = (inv(H.t() * H) * H.t()) * y;
-    this->betaTopi = arma::pinv(H) * y;
+    this->betaTopi = MPPI * y;
+    std::cout << "Beta Topi" << '\n' << this->betaTopi << std::endl;
     return H;
 }
 
@@ -49,6 +57,7 @@ arma::mat Melm::calculateELMTesting(const std::vector<Dataset> *data)
 {
     arma::mat X = this->generateDataMatrix(data);
     arma::mat _y = this->calculateH(&X) * this->betaTopi;
+    std::cout << "Nilai Prediksi" << '\n' << _y << std::endl;
     return _y;
 }
 
@@ -102,29 +111,24 @@ arma::mat Melm::generateActualClass(const std::vector<Dataset> *data)
 
 arma::mat Melm::calculateH(const arma::Mat<double> *dataset)
 {
-    arma::mat hInit = (*dataset) * this->w.t();
+    arma::mat hInit = (*dataset) * this->w;
+    std::cout << '\n' << "Perhitungan H" << std::endl;
+    std::cout << "H_Init" << '\n' << hInit << std::endl;
     if(this->biasEnable)
     {
-        hInit.each_row( [this](arma::rowvec& a){
-            assert (a.size() == b.size());
-            int _c = -1;
-            for(arma::rowvec::col_iterator i = a.begin(), is = a.end(); i!=is; ++i)
-            {
-                (*i) = (1.0 / (1.0 + exp(-((*i) + b(++_c, 0)))));
-            }
-        } );
+        arma::mat _bias = arma::ones(dataset->n_rows, 1) * this->b;
+        std::cout << "Bias" << '\n' << _bias << std::endl;
+        hInit += _bias;
     }
-    else
-    {
-        hInit.each_row( [this](arma::rowvec& a){
-            assert (a.size() == b.size());
-            int _c = -1;
-            for(arma::rowvec::col_iterator i = a.begin(), is = a.end(); i!=is; ++i)
-            {
-                (*i) = (1.0 / (1.0 + exp(-(*i))));
-            }
-        } );
-    }
+    hInit.each_row([this](arma::rowvec &a)
+                   {
+                       int _c = -1;
+                       for (arma::rowvec::col_iterator i = a.begin(), is = a.end(); i != is; ++i)
+                       {
+                           (*i) = (1.0 / (1.0 + exp(-(*i))));
+                       }
+                   });
+    std::cout << "H" << '\n' << hInit << std::endl;
     return hInit;
 }
 
@@ -142,15 +146,21 @@ void Melm::assignPrediction(std::vector<Dataset> *dataset, arma::mat *_y)
 
 double Melm::calculateAccuracy(const std::vector<Dataset> *normDataset, arma::mat *_y)
 {
+    std::cout << "Akurasi" << std::endl;
+
     assert ((*normDataset).size() == (*_y).size());
     double accuracy = 0.0;
     int _c = -1;
     for(std::vector<Dataset>::const_iterator i = (*normDataset).begin() -1, is = (*normDataset).end(); ++i < is; )
     {
         const double actual = (*i).getActual();
-        accuracy += (abs((((*_y)(++_c, 0) - actual)/actual)*100));
+        double __val = (abs((((*_y)(++_c, 0) - actual) / actual) * 100));
+        std::cout << __val << '\t';
+        accuracy += __val;
     }
+    std::cout << std::endl << "Akurasi" << '\t' << accuracy << '\t' << (_c + 1) << "\t=\t";
     accuracy /= ++_c;
+    std::cout << accuracy << std::endl;
     return accuracy;
 }
 
