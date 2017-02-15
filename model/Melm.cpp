@@ -7,7 +7,6 @@
  */
 
 #include "Melm.h"
-#include <cmath>
 #include <cassert>
 
 void Melm::registerMetadata(int feature, const arma::Mat<double> &weight, const arma::Mat<double> &bias,
@@ -39,7 +38,8 @@ arma::mat Melm::calculateELMTraining(const std::vector<Dataset> *data)
     arma::mat X = this->generateDataMatrix(data);
     arma::mat y = this->generateActualClass(data);
     arma::mat H = this->calculateH(&X);
-    this->betaTopi = (inv(H.t() * H) * H.t()) * y;
+    //this->betaTopi = (inv(H.t() * H) * H.t()) * y;
+    this->betaTopi = arma::pinv(H) * y;
     return H;
 }
 
